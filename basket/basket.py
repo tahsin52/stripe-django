@@ -1,4 +1,7 @@
 from decimal import Decimal
+
+from django.conf import settings
+
 from store.models import Product
 
 
@@ -61,7 +64,15 @@ class Basket():
         self.save()
 
     def get_total_price(self):
-        return sum(Decimal(item['price']) * item['qty'] for item in self.basket.values())
+        subtotal = sum(Decimal(item['price']) * item['qty'] for item in self.basket.values())
+
+        if subtotal == 0:
+            shipping = Decimal(0.00)
+        else:
+            shipping = Decimal(11.50)
+
+        total = subtotal + Decimal(shipping)
+        return total
 
     def delete(self, product):
         """
@@ -76,3 +87,7 @@ class Basket():
 
     def save(self):
         self.session.modified = True
+
+    def clear(self):
+        del self.session[settings.BASKET_SESSION_ID]
+        self.save()

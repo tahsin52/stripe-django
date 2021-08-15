@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'basket',
     'category',
     'payment',
+    'orders',
 ]
 
 MIDDLEWARE = [
@@ -138,6 +139,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static')
 ]
+
+os.environ.setdefault('STRIPE_PUBLISHABLE_KEY', 'pk_test_51HtWOPImJchHSxjti9jrBFlsn2EdUTOF3tVTajQYax2AQXfMtYknLYApj9pB7hkfQN78DcAonTlmKdYrnxZXBSpb007gUSag4n')
+STRIPE_SECRET_KEY = 'sk_test_51HtWOPImJchHSxjterCnM8KLnvCdPE7Pp1jamIxfMOkGq1K7KYrD5t0PJKTACcvn3Ld1On8jUzEH9EOrRNKHDWd000yXIRBIes'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
