@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'category',
     'payment',
     'orders',
+
+    'mptt',
 ]
 
 MIDDLEWARE = [
