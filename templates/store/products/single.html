@@ -5,7 +5,16 @@
 {% endblock %}
 {% block content %}
 
+<div class="container">
+    {% if messages %}
+        <div class="alert alert-primary alert-{{ message.tags }}" role="alert">
+            {% for message in messages %}
+                {{ message|safe }} - <a class="alert-link" href={% url 'account:wishlist' %}>Your Wishlist</a>.
+            {% endfor %}
 
+        </div>
+    {% endif %} 
+</div>
 
 
     <div class="row g-3">

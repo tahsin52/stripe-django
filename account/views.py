@@ -13,14 +13,34 @@ from store.models import Product
 from .forms import RegistrationForm, UserEditForm, UserAddressForm
 from .models import UserBase, Address
 from .tokens import account_activation_token
+from django.contrib import messages
+
+@login_required
+def add_to_wishlist(request, id):
+    product = get_object_or_404(Product, id=id)
+    if product.users_wishlist.filter(id=request.user.id).exists():
+        product.users_wishlist.remove(request.user)
+    else:
+        product.users_wishlist.add(request.user)
+        messages.success(request, "Added " + product.title + " to your WishList")
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
+@login_required
+def wishlist(request):
+    products = Product.objects.filter(users_wishlist=request.user)
+    context = {
+        'wishlist':products
+    }
+    return render(request, 'account/dashboard/user_wishlist.html', context)
 
 
 @login_required
 def dashboard(request):
     orders = user_orders(request)
+    products = Product.objects.filter(users_wishlist=request.user)
     return render(request,
-                  'account/user/dashboard.html',
-                  {'section': 'profile', 'orders': orders})
+                  'account/dashboard/dashboard.html',
+                  {'section': 'profile', 'orders': orders, 'products': products})
 
 
 @login_required
@@ -34,7 +54,7 @@ def edit_details(request):
         user_form = UserEditForm(instance=request.user)
 
     return render(request,
-                  'account/user/edit_details.html', {'user_form': user_form})
+                  'account/dashboard/edit_details.html', {'user_form': user_form})
 
 
 @login_required
@@ -62,7 +82,7 @@ def account_register(request):
             current_site = get_current_site(request)
             subject = 'Activate your Account'
             message = render_to_string('account/registration/account_activation_email.html', {
-                'user': user,
+                'password_reset': user,
                 'domain': current_site.domain,
                 'uid': urlsafe_base64_encode(force_bytes(user.pk)),
                 'token': account_activation_token.make_token(user),
@@ -136,12 +156,3 @@ def set_default(request, id):
     return redirect("account:addresses")
 
 
-@login_required
-def add_to_wishlist(request, id):
-    product = get_object_or_404(Product, id=id)
-    if product.users_wishlist.filter(id=request.user.id).exists():
-        product.users_wishlist.remove(request.user)
-    else:
-        product.users_wishlist.add(request.user)
-
-    return HttpResponseRedirect(request.META['HTTP_REFERER'])
