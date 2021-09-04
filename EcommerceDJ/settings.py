@@ -38,6 +38,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # 2FA
+    'django_otp',
+    'django_otp.plugins.otp_static',
+    'django_otp.plugins.otp_totp',
+    'two_factor',
+
+    # Apps
     'account',
     'store',
     'basket',
@@ -56,6 +63,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    # 2FA
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_otp.middleware.OTPMiddleware',
 ]
 
 ROOT_URLCONF = 'EcommerceDJ.urls'
@@ -117,7 +128,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Istanbul'
 
 USE_I18N = True
 
@@ -133,8 +144,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 BASKET_SESSION_ID = 'basket'
 
 AUTH_USER_MODEL = 'account.UserBase'
-# LOGIN_REDIRECT_URL = '/account/dashboard'
+LOGIN_REDIRECT_URL = '/account/dashboard'
 # LOGIN_URL = '/account/login/'
+LOGIN_URL = 'two_factor:login'
 
 
 STATIC_URL = '/static/'
