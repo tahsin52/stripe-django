@@ -23,9 +23,7 @@ class Error(TemplateView):
 def BasketView(request):
     basket = Basket(request)
     total = str(basket.get_total_price())
-    print(total)
     total = total.replace('.', '')
-    print('total:: ', total)
     total = int(total)
 
     stripe.api_key = settings.STRIPE_SECRET_KEY
