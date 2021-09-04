@@ -28,6 +28,11 @@
     <button class="btn btn-primary btn-block py-2 mb-4 mt-5 fw-bold w-100" type="submit" value="Save changes">Save
         Changes</button>
     <hr class="mb-3">
+
+    <a href="{% url 'two_factor:profile' %}">
+        <button class="btn btn-primary btn-block py-2 mb-4 mt-5 fw-bold w-100" type="submit" value="Save changes">2 FACTOR AUTHENTICATED</button>
+    </a>
+    
 </form>
 <form class="account-form" action="{% url "account:delete_user" %}" method="post">
     {% csrf_token %}
